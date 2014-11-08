@@ -13,8 +13,10 @@ public:
 	explicit widget(QWidget* parent = nullptr);
 	~widget();
 protected:
-	void paintEvent(QPaintEvent *);
+	void paintEvent(QPaintEvent *) override;
 private:
+	QString load_qss(const QString& file_name) const;
+
 	Ui::login* ui = nullptr;
 };
 
