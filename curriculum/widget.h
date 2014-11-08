@@ -8,8 +8,8 @@ namespace Ui {
 	class login;
 }
 
-class QNetworkReply;
 class QNetworkAccessManager;
+class QNetworkReply;
 class QFile;
 
 class widget: public QWidget {
@@ -23,6 +23,7 @@ private slots:
 	void on_button_login_clicked();
 private:
 	void request_finished();
+	void request_ready() const noexcept;
 	void login(const QString& id, const QString& passwd);
 	QString load_qss(const QString& file_name) const;
 

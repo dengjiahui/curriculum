@@ -7,6 +7,7 @@
 #include <QNetworkRequest>
 #include <QFile>
 #include <utility>
+#include <QDebug>
 
 const QString HFUT_URL("http://210.45.240.29/");
 
@@ -53,34 +54,45 @@ void widget::on_button_login_clicked()
 	auto id = ui->line_edit_id->text();
 	auto passwd = ui->line_edit_pwd->text();
 
-	connect(reply, &QNetworkReply::finished,
-		this, &widget::request_finished);
+	information = new QFile("a.txt");
+	if (!information->open(QIODevice::WriteOnly)) {
+		qDebug() <<  "file open error";
+		delete information;
+		information = nullptr;
+
+		return;
+	}
 	login(id, passwd);
 }
 
 // deal with the reply
 void widget::request_finished()
 {
-	if (QNetworkReply::NoError == reply->error()) {
-		information = new QFile(":/info/main_info");
-		if (information->open(QFile::WriteOnly)) {
-			information->write(reply->readAll());
-		}
-		information->close();
-		delete information;
-		information = nullptr;
-	} else {
-		// leave to complete later
-	}
+	information->flush();
+	information->close();
 	reply->deleteLater();
 	reply = nullptr;
+	delete information;
+	information = nullptr;
+}
+
+void widget::request_ready() const noexcept
+{
+	if (information) {
+		information->write(reply->readAll());
+	}
 }
 
 // post a request and save the returned result
 void widget::login(const QString& id, const QString& passwd)
 {
 	url = std::move(QUrl(HFUT_URL + "pass.asp"));
-	QByteArray info("user=" + id + "&password=" + passwd);
+	QByteArray info(
+		QString(
+		"user=" + id + "&password=" + passwd).toStdString().c_str());
 
-	reply = manager->post(QNetworkRequest(url), info);
+//	reply = manager->post(QNetworkRequest(url), info);
+	reply = manager->get(QNetworkRequest(QUrl("http://www.baidu.com")));
+	connect(reply, SLOT(readyRead()), this, SLOT(request_ready()));
+	connect(reply, SLOT(finished()), this, SLOT(request_finished()));
 }
