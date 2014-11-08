@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file alias="images/login_pic">images/login.jpg</file>
         <file alias="qss/login_qss">qss/login.qss</file>
+        <file alias="info/main_info">info/info.txt</file>
     </qresource>
 </RCC>
