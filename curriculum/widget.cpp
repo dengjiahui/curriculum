@@ -1,28 +1,21 @@
 #include "ui_login.h"
 #include "widget.h"
-#include <QTextCodec>
+#include "cookies.h"
 #include <QPainter>
-#include <QHBoxLayout>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QUrlQuery>
 #include <QFile>
 #include <utility>
-#include <QDebug>
 
-const QString HFUT_URL("http://210.45.240.29/");
-
-widget::widget(QWidget* parent): QWidget(parent), ui(new Ui::login)
+widget::widget(QWidget* parent): QWidget(parent), ui_(new Ui::login)
 {
-	ui->setupUi(this);
-	manager = new QNetworkAccessManager(this);
+	ui_->setupUi(this);
 }
 
 widget::~widget()
 {
-	delete ui;
-	ui = nullptr;
+	delete ui_;
+	ui_ = nullptr;
+	delete info_cookies;
+	info_cookies = nullptr;
 }
 
 // paint the login background
@@ -53,92 +46,10 @@ QString widget::load_qss(const QString& file_name) const
 // the login action
 void widget::on_button_login_clicked()
 {
-	auto id = ui->line_edit_id->text();
-	auto passwd = ui->line_edit_pwd->text();
+	auto id = ui_->line_edit_id->text();
+	auto passwd = ui_->line_edit_pwd->text();
 
-	information = new QFile("index.html");
-	if (!information->open(QIODevice::WriteOnly)) {
-		qDebug() <<  "file open error";
-		delete information;
-		information = nullptr;
-
-		return;
-	}
-	login(id, passwd);
-}
-
-// do the clean work
-void widget::request_finished()
-{
-	information->flush();
-	information->close();
-	QVariant redirectionTarget =
-		reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-
-	if (QNetworkReply::NoError == reply->error()) {
-		if (!redirectionTarget.isNull()) {
-			url = url.resolved(redirectionTarget.toUrl());
-			reply->deleteLater();
-			information->open(QIODevice::WriteOnly);
-			information->resize(0);
-			start_get();
-
-			return;
-		}
-	}
-	reply->deleteLater();
-	reply = nullptr;
-	delete information;
-	information = nullptr;
-//	information = new QFile("index.html");
-//	information->open(QIODevice::ReadOnly);
-//	qDebug() << tr(information->readAll());
-}
-
-// write returned information into the file
-void widget::request_ready() noexcept
-{
-	if (information) {
-		QTextCodec* tc = QTextCodec::codecForName("GBK");
-
-		information->write(
-			tc->toUnicode(reply->readAll()).toStdString().c_str());
-	}
-}
-
-// post a request and prepare for the result
-void widget::login(const QString& id, const QString& passwd)
-{
-	url = std::move(QUrl(HFUT_URL + "pass.asp"));
-	QUrlQuery params;
-
-	params.addQueryItem("UserStyle", "student");
-	params.addQueryItem("user", id);
-	params.addQueryItem("password", passwd);
-
-	start_post(params);
-//	start_get();
-}
-
-// the connect part using post way
-void widget::start_post(const QUrlQuery& params) noexcept
-{
-	QNetworkRequest request(url);
-
-	request.setHeader(QNetworkRequest::ContentTypeHeader,
-			  QVariant("application/x-www-form-urlencoded"));
-	reply = manager->post(request,
-			      params.query(QUrl::FullyEncoded).toUtf8());
-
-	connect(reply, SIGNAL(readyRead()), this, SLOT(request_ready()));
-	connect(reply, SIGNAL(finished()), this, SLOT(request_finished()));
-}
-
-// the get way
-void widget::start_get() noexcept
-{
-	reply = manager->get(QNetworkRequest(url));
-
-	connect(reply, SIGNAL(readyRead()), this, SLOT(request_ready()));
-	connect(reply, SIGNAL(finished()), this, SLOT(request_finished()));
+	info_cookies = new cookies(QCoreApplication::applicationDirPath() +
+				   "index.html", id, passwd);
+	info_cookies->login();
 }

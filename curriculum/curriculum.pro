@@ -13,9 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        widget.cpp
+        widget.cpp \
+    cookies.cpp
 
-HEADERS  += widget.h
+HEADERS  += widget.h \
+    cookies.h
 
 FORMS    += \
     login.ui
