@@ -1,5 +1,6 @@
 #include "ui_login.h"
 #include "widget.h"
+#include <QTextCodec>
 #include <QPainter>
 #include <QHBoxLayout>
 #include <QNetworkAccessManager>
@@ -89,14 +90,19 @@ void widget::request_finished()
 	reply = nullptr;
 	delete information;
 	information = nullptr;
-	information = new QFile("index.html");
+//	information = new QFile("index.html");
+//	information->open(QIODevice::ReadOnly);
+//	qDebug() << tr(information->readAll());
 }
 
 // write returned information into the file
 void widget::request_ready() noexcept
 {
 	if (information) {
-		information->write((reply->readAll()));
+		QTextCodec* tc = QTextCodec::codecForName("GBK");
+
+		information->write(
+			tc->toUnicode(reply->readAll()).toStdString().c_str());
 	}
 }
 
