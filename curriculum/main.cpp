@@ -1,4 +1,4 @@
-#include "widget.h"
+#include "widget/widget.h"
 #include <QApplication>
 
 int main(int argc, char* argv[])

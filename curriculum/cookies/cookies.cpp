@@ -48,15 +48,16 @@ void cookies::request_finished()
 
 			return;
 		}
+	} else {
+		http_status_ = false;
 	}
 	reply_->deleteLater();
 	reply_ = nullptr;
 	delete information_;
 	information_ = nullptr;
-//	information_ = new QFile(QCoreApplication::applicationDirPath() +
-//				 "index.html");
-//	information_->open(QIODevice::ReadOnly);
-//	qDebug() << tr(information_->readAll());
+	information_ = new QFile("index.html");
+	information_->open(QIODevice::ReadOnly);
+	qDebug() << tr(information_->readAll());
 }
 
 // write returned information into the file
@@ -71,7 +72,7 @@ void cookies::request_ready() noexcept
 }
 
 // post a request and prepare for the result
-void cookies::login() noexcept
+void cookies::login()
 {
 	url_ = std::move(QUrl(HFUT_URL + "pass.asp"));
 	QUrlQuery params;

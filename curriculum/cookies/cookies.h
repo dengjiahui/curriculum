@@ -18,7 +18,7 @@ public:
 	~cookies();
 	QList<QNetworkCookie> get_cookies() const noexcept;
 	void set_cookies(const QList<QNetworkCookie>& cookie_list) noexcept;
-	void login() noexcept;
+	void login();
 private slots:
 	void request_finished();
 	void request_ready() noexcept;
@@ -31,6 +31,7 @@ private:
 	QFile* information_ = nullptr;
 	QString user_;
 	QString passwd_;
+	bool http_status_ = true;
 
 	static const QString HFUT_URL;
 };

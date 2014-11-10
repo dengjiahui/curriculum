@@ -1,9 +1,10 @@
 #include "ui_login.h"
 #include "widget.h"
-#include "cookies.h"
+#include "../cookies/cookies.h"
 #include <QPainter>
 #include <QFile>
 #include <utility>
+#include <QDebug>
 
 widget::widget(QWidget* parent): QWidget(parent), ui_(new Ui::login)
 {
@@ -49,8 +50,7 @@ void widget::on_button_login_clicked()
 	auto id = ui_->line_edit_id->text();
 	auto passwd = ui_->line_edit_pwd->text();
 
-	info_cookies = new cookies(QCoreApplication::applicationDirPath() +
-				   "index.html", id, passwd);
+	info_cookies = new cookies("index.html", id, passwd);
 	if (!info_cookies) {
 		qDebug() << "No enough memory available to do the login work";
 
