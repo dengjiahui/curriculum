@@ -51,5 +51,10 @@ void widget::on_button_login_clicked()
 
 	info_cookies = new cookies(QCoreApplication::applicationDirPath() +
 				   "index.html", id, passwd);
+	if (!info_cookies) {
+		qDebug() << "No enough memory available to do the login work";
+
+		return;
+	}
 	info_cookies->login();
 }
