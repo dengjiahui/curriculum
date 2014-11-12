@@ -8,6 +8,7 @@ namespace Ui {
 }
 
 class cookies;
+class QFile;
 
 class widget: public QWidget {
 	Q_OBJECT
@@ -21,6 +22,7 @@ private slots:
 private:
 	QString load_qss(const QString& file_name) const;
 	cookies* info_cookies = nullptr;
+	QFile* login_status = nullptr;
 
 	Ui::login* ui_ = nullptr;
 };

@@ -26,8 +26,9 @@ private slots:
 	void start_get() noexcept;
 private:
 	QUrl url_;
+	QVariant cookie;
 	QNetworkReply* reply_ = nullptr;
-	QNetworkAccessManager* manager_ = nullptr;
+	QNetworkAccessManager* manager_;
 	QFile* information_ = nullptr;
 	QString user_;
 	QString passwd_;

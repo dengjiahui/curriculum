@@ -16,34 +16,28 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>110</y>
-     <width>244</width>
-     <height>329</height>
+     <x>80</x>
+     <y>60</y>
+     <width>167</width>
+     <height>308</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="layout_whole">
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>40</number>
-    </property>
-    <property name="bottomMargin">
-     <number>80</number>
-    </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="lable_title">
-      <property name="text">
-       <string>My Curriculum</string>
+     <spacer name="spacer_bottom">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
       </property>
-     </widget>
+     </spacer>
     </item>
     <item>
      <spacer name="spacer_top">
@@ -59,6 +53,29 @@
      </spacer>
     </item>
     <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3"/>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+    </item>
+    <item>
+     <widget class="QLabel" name="lable_title">
+      <property name="text">
+       <string>My Curriculum</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="line_edit_pwd">
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLineEdit" name="line_edit_id"/>
@@ -66,36 +83,23 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QLineEdit" name="line_edit_pwd">
-        <property name="echoMode">
-         <enum>QLineEdit::Password</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <spacer name="spacer_bottom">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3"/>
-    </item>
-    <item>
      <widget class="QPushButton" name="button_login">
       <property name="text">
        <string>Log In</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="check_remember">
+      <property name="text">
+       <string>Remember me</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="check_autologin">
+      <property name="text">
+       <string>Auto Login</string>
       </property>
      </widget>
     </item>

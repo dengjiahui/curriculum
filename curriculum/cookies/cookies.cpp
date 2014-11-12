@@ -5,6 +5,7 @@
 #include <QNetworkRequest>
 #include <QUrlQuery>
 #include <QFile>
+#include <QVariant>
 #include <utility>
 #include <QCoreApplication>
 #include <QDebug>
@@ -49,15 +50,22 @@ void cookies::request_finished()
 			return;
 		}
 	} else {
+		qWarning() << "ERROR:" << reply_->errorString();
 		http_status_ = false;
+
+		return;
 	}
+	QList<QNetworkCookie> login_cookies = manager_->cookieJar()
+						->cookiesForUrl(url_);
+
+	cookie.setValue(std::move(login_cookies));
 	reply_->deleteLater();
 	reply_ = nullptr;
 	delete information_;
 	information_ = nullptr;
-	information_ = new QFile("index.html");
-	information_->open(QIODevice::ReadOnly);
-	qDebug() << tr(information_->readAll());
+//	information_ = new QFile("index.html");
+//	information_->open(QIODevice::ReadOnly);
+//	qDebug() << tr(information_->readAll());
 }
 
 // write returned information into the file

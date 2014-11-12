@@ -9,10 +9,17 @@
 widget::widget(QWidget* parent): QWidget(parent), ui_(new Ui::login)
 {
 	ui_->setupUi(this);
+	login_status = "login_status.txt";
+	if (login_status->open(QIODevice::ReadWrite)) {
+
+	}
 }
 
 widget::~widget()
 {
+	login_status->close();
+	delete login_status;
+	login_status = nullptr;
 	delete ui_;
 	ui_ = nullptr;
 	delete info_cookies;
