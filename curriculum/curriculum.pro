@@ -14,14 +14,17 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     cookies/cookies.cpp \
-    widget/widget.cpp
+    widget/widget.cpp \
+    course_db/course_db.cpp
 
 HEADERS  += cookies/cookies.h \
     widget/widget.h \
-    test/test.h
+    test/test.h \
+    course_db/course_db.h
 
 FORMS    += \
-    login.ui
+    ui/course_table.ui \
+    ui/login.ui
 
 CONFIG += mobility
 
@@ -31,4 +34,6 @@ MOBILITY =
 
 RESOURCES += \
     curriculum.qrc
+
+OTHER_FILES +=
 

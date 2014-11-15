@@ -3,6 +3,7 @@
 
 #include <QNetworkCookie>
 #include <QNetworkCookieJar>
+#include <QVariant>
 #include <QUrl>
 
 class QNetworkAccessManager;
@@ -18,7 +19,9 @@ public:
 	~cookies();
 	QList<QNetworkCookie> get_cookies() const noexcept;
 	void set_cookies(const QList<QNetworkCookie>& cookie_list) noexcept;
-	void login();
+	void login(const QString& target);
+
+	static const QString HFUT_URL;
 private slots:
 	void request_finished();
 	void request_ready() noexcept;
@@ -26,6 +29,7 @@ private slots:
 	void start_get() noexcept;
 private:
 	QUrl url_;
+	QUrl url_after_login_;
 	QVariant cookie;
 	QNetworkReply* reply_ = nullptr;
 	QNetworkAccessManager* manager_;
@@ -33,8 +37,6 @@ private:
 	QString user_;
 	QString passwd_;
 	bool http_status_ = true;
-
-	static const QString HFUT_URL;
 };
 
 inline QList<QNetworkCookie> cookies::get_cookies() const noexcept

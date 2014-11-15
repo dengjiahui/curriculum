@@ -61,9 +61,15 @@ void cookies::request_finished()
 	cookie.setValue(std::move(login_cookies));
 	reply_->deleteLater();
 	reply_ = nullptr;
-	delete information_;
-	information_ = nullptr;
-//	information_ = new QFile("index.html");
+	if (!url_after_login_.isEmpty()) {
+		url_ = url_after_login_;
+		information_->open(QIODevice::WriteOnly);
+		information_->resize(0);
+		url_after_login_.clear();
+		start_get();
+	}
+//	qDebug() << QCoreApplication::applicationDirPath();
+//	information_ = new QFile(file_name);
 //	information_->open(QIODevice::ReadOnly);
 //	qDebug() << tr(information_->readAll());
 }
@@ -80,8 +86,11 @@ void cookies::request_ready() noexcept
 }
 
 // post a request and prepare for the result
-void cookies::login()
+void cookies::login(const QString& target)
 {
+	if (!target.isEmpty()) {
+		url_after_login_ = std::move(QUrl(target));
+	}
 	url_ = std::move(QUrl(HFUT_URL + "pass.asp"));
 	QUrlQuery params;
 

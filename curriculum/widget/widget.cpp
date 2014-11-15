@@ -1,29 +1,26 @@
 #include "ui_login.h"
-#include "widget.h"
+#include "ui_course_table.h"
 #include "../cookies/cookies.h"
+#include "widget.h"
 #include <QPainter>
 #include <QFile>
 #include <utility>
 #include <QDebug>
 
-widget::widget(QWidget* parent): QWidget(parent), ui_(new Ui::login)
+widget::widget(QWidget* parent): QWidget(parent), ui_login_(new Ui::login),
+				ui_course_table_(new Ui::course_table)
 {
-	ui_->setupUi(this);
-	login_status = "login_status.txt";
-	if (login_status->open(QIODevice::ReadWrite)) {
-
-	}
+	ui_login_->setupUi(this);
 }
 
 widget::~widget()
 {
-	login_status->close();
-	delete login_status;
-	login_status = nullptr;
-	delete ui_;
-	ui_ = nullptr;
-	delete info_cookies;
-	info_cookies = nullptr;
+	delete ui_course_table_;
+	ui_course_table_ = nullptr;
+	delete ui_login_;
+	ui_login_ = nullptr;
+	delete info_cookies_;
+	info_cookies_ = nullptr;
 }
 
 // paint the login background
@@ -54,14 +51,17 @@ QString widget::load_qss(const QString& file_name) const
 // the login action
 void widget::on_button_login_clicked()
 {
-	auto id = ui_->line_edit_id->text();
-	auto passwd = ui_->line_edit_pwd->text();
+	auto id = ui_login_->line_edit_id->text();
+	auto passwd = ui_login_->line_edit_pwd->text();
 
-	info_cookies = new cookies("index.html", id, passwd);
-	if (!info_cookies) {
+	info_cookies_ = new cookies("info.html", id, passwd);
+	if (!info_cookies_) {
 		qDebug() << "No enough memory available to do the login work";
 
 		return;
 	}
-	info_cookies->login();
+	info_cookies_->login(cookies::HFUT_URL + "student/asp/xsxxxxx.asp");
+//	this->c
+//	ui_course_table_->setupUi(this);
+//	this->show();
 }
