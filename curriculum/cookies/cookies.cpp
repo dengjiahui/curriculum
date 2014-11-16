@@ -55,10 +55,11 @@ void cookies::request_finished()
 
 		return;
 	}
-	QList<QNetworkCookie> login_cookies = manager_->cookieJar()
-						->cookiesForUrl(url_);
+	auto cookie_info_ = manager_->cookieJar()->cookiesForUrl(url_);
 
-	cookie.setValue(std::move(login_cookies));
+	cookie.setValue(cookie_info_);
+	qDebug() << cookie;
+//	qDebug() << cookie_info_ << endl;
 	reply_->deleteLater();
 	reply_ = nullptr;
 	if (!url_after_login_.isEmpty()) {
@@ -69,8 +70,8 @@ void cookies::request_finished()
 		start_get();
 	}
 //	qDebug() << QCoreApplication::applicationDirPath();
-//	information_ = new QFile(file_name);
-//	information_->open(QIODevice::ReadOnly);
+//	information_ = new QFile("info.html");
+//	information_->open(QIODevice::ReadWrite);
 //	qDebug() << tr(information_->readAll());
 }
 

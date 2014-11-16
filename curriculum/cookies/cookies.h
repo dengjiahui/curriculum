@@ -17,8 +17,6 @@ public:
 	cookies(const QString& file, const QString& username,
 		const QString& password);
 	~cookies();
-	QList<QNetworkCookie> get_cookies() const noexcept;
-	void set_cookies(const QList<QNetworkCookie>& cookie_list) noexcept;
 	void login(const QString& target);
 
 	static const QString HFUT_URL;
@@ -28,6 +26,9 @@ private slots:
 	void start_post(const QUrlQuery& params) noexcept;
 	void start_get() noexcept;
 private:
+	QList<QNetworkCookie> get_cookies() const noexcept;
+	void set_cookies(const QList<QNetworkCookie>& cookie_list) noexcept;
+
 	QUrl url_;
 	QUrl url_after_login_;
 	QVariant cookie;

@@ -60,7 +60,7 @@ void widget::on_button_login_clicked()
 
 		return;
 	}
-	info_cookies_->login(cookies::HFUT_URL + "student/asp/xsxxxxx.asp");
+	info_cookies_->login(cookies::HFUT_URL + "student/asp/grkb1.asp");
 //	this->c
 //	ui_course_table_->setupUi(this);
 //	this->show();
