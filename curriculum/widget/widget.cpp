@@ -1,6 +1,6 @@
 #include "ui_login.h"
 #include "ui_course_table.h"
-#include "../cookies/cookies.h"
+#include "../html_parser/html_parser.h"
 #include "widget.h"
 #include <QPainter>
 #include <QFile>
@@ -19,8 +19,8 @@ widget::~widget()
 	ui_course_table_ = nullptr;
 	delete ui_login_;
 	ui_login_ = nullptr;
-	delete info_cookies_;
-	info_cookies_ = nullptr;
+	delete parser_;
+	parser_ = nullptr;
 }
 
 // paint the login background
@@ -54,13 +54,13 @@ void widget::on_button_login_clicked()
 	auto id = ui_login_->line_edit_id->text();
 	auto passwd = ui_login_->line_edit_pwd->text();
 
-	info_cookies_ = new cookies("info.html", id, passwd);
-	if (!info_cookies_) {
+	parser_ = new html_parser("info.html", id, passwd);
+	if (!parser_) {
 		qDebug() << "No enough memory available to do the login work";
 
 		return;
 	}
-	info_cookies_->login(cookies::HFUT_URL + "student/asp/grkb1.asp");
+	parser_->login();
 //	this->c
 //	ui_course_table_->setupUi(this);
 //	this->show();

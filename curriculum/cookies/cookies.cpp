@@ -1,17 +1,17 @@
 #include "cookies.h"
 #include <QTextCodec>
 #include <QNetworkAccessManager>
+#include <QNetworkCookieJar>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QUrlQuery>
 #include <QFile>
 #include <QVariant>
-#include <utility>
-#include <QCoreApplication>
+//#include <QCoreApplication>
 #include <QDebug>
 
 // the common url
-const QString cookies::HFUT_URL("http://210.45.240.29/");
+const QString cookies::HFUT_URL_("http://210.45.240.29/");
 
 cookies::cookies(const QString& file, const QString& username,
 		 const QString& password): user_(username), passwd_(password)
@@ -55,20 +55,18 @@ void cookies::request_finished()
 
 		return;
 	}
-	auto cookie_info_ = manager_->cookieJar()->cookiesForUrl(url_);
-
-	cookie.setValue(cookie_info_);
-	qDebug() << cookie;
+	cookie_info_ = manager_->cookieJar()->cookiesForUrl(url_);
+//	qDebug() << cookie;
 //	qDebug() << cookie_info_ << endl;
 	reply_->deleteLater();
 	reply_ = nullptr;
-	if (!url_after_login_.isEmpty()) {
-		url_ = url_after_login_;
-		information_->open(QIODevice::WriteOnly);
-		information_->resize(0);
-		url_after_login_.clear();
-		start_get();
-	}
+//	if (!url_after_login_.isEmpty()) {
+//		url_ = url_after_login_;
+//		information_->open(QIODevice::WriteOnly);
+//		information_->resize(0);
+//		url_after_login_.clear();
+//		start_get();
+//	}
 //	qDebug() << QCoreApplication::applicationDirPath();
 //	information_ = new QFile("info.html");
 //	information_->open(QIODevice::ReadWrite);
@@ -87,12 +85,12 @@ void cookies::request_ready() noexcept
 }
 
 // post a request and prepare for the result
-void cookies::login(const QString& target)
+void cookies::login() noexcept
 {
-	if (!target.isEmpty()) {
-		url_after_login_ = std::move(QUrl(target));
-	}
-	url_ = std::move(QUrl(HFUT_URL + "pass.asp"));
+//	if (!target.isEmpty()) {
+//		url_after_login_ = std::move(QUrl(target));
+//	}
+	url_ = std::move(QUrl(HFUT_URL_ + "pass.asp"));
 	QUrlQuery params;
 
 	params.addQueryItem("UserStyle", "student");
@@ -112,11 +110,7 @@ void cookies::start_post(const QUrlQuery& params) noexcept
 			  QVariant("application/x-www-form-urlencoded"));
 	reply_ = manager_->post(request,
 			      params.query(QUrl::FullyEncoded).toUtf8());
-
-	connect(reply_, &QNetworkReply::readyRead,
-		this, &cookies::request_ready);
-	connect(reply_, &QNetworkReply::finished,
-		this, &cookies::request_finished);
+	connect_slots();
 }
 
 // the get way
@@ -124,9 +118,23 @@ void cookies::start_get() noexcept
 {
 	reply_ = manager_->get(QNetworkRequest(url_));
 //	reply_ = manager_->get(QNetworkRequest(QUrl("http://www.baidu.com/")));
+	connect_slots();
+}
 
+void cookies::connect_slots() noexcept
+{
 	connect(reply_, &QNetworkReply::readyRead,
 		this, &cookies::request_ready);
 	connect(reply_, &QNetworkReply::finished,
 		this, &cookies::request_finished);
+}
+
+// get html using cookies
+void cookies::cookie_get(const QVariant& cookie, const QString& url) noexcept
+{
+	QNetworkRequest request(std::move(QUrl(HFUT_URL_ + url)));
+
+	request.setHeader(QNetworkRequest::CookieHeader, cookie);
+	reply_ = manager_->get(request);
+	connect_slots();
 }

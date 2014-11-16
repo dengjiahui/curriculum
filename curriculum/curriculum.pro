@@ -15,12 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
     cookies/cookies.cpp \
     widget/widget.cpp \
-    course_db/course_db.cpp
+    course_db/course_db.cpp \
+    html_parser/html_parser.cpp
 
 HEADERS  += cookies/cookies.h \
     widget/widget.h \
     test/test.h \
-    course_db/course_db.h
+    course_db/course_db.h \
+    html_parser/html_parser.h
 
 FORMS    += \
     ui/course_table.ui \

@@ -8,7 +8,7 @@ namespace Ui {
 	class course_table;
 }
 
-class cookies;
+class html_parser;
 class QFile;
 
 class widget: public QWidget {
@@ -22,7 +22,7 @@ private slots:
 	void on_button_login_clicked();
 private:
 	QString load_qss(const QString& file_name) const;
-	cookies* info_cookies_ = nullptr;
+	html_parser* parser_ = nullptr;
 
 	Ui::login* ui_login_ = nullptr;
 	Ui::course_table* ui_course_table_ = nullptr;
